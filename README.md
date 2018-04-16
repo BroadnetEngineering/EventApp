@@ -1,4 +1,4 @@
-# EventApp
+# Event App
 Design an event application.
 
 ### Your application should accomplish the following:
