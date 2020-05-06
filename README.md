@@ -8,6 +8,7 @@ Design an event application.
 * Handle differing timezones
 
 ### The app should follow these rules:
-* Use a MySQL database
-* Be written in PHP for backend technology
+* You may use the language of your choice.
+* The frontend portion of your app is entirely freeform.
+* If you use MySQL or similar, you must provide a SQL script to create the schema as part of your pull request.
 * No existing MVC frameworks
