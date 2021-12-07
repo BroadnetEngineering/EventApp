@@ -11,6 +11,6 @@
     </ul>
 
     <div class="col-md-3 text-end">
-        <button type="button" class="btn btn-outline-primary me-2">Create Event</button>
+        <a href="/events/create" class="btn btn-outline-primary me-2">Create Event</a>
     </div>
 </header>
