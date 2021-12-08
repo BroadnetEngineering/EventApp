@@ -54,7 +54,11 @@
                 <label class="form-label">Timezone</label>
                 <select class="form-select" name="timezone">
                     @foreach($timezones as $timezone)
-                        <option value="{{ array_search ($timezone, $timezones) }}">{{ $timezone }} </option>
+                        @if(Illuminate\Support\Facades\Cookie::get('timezone') == array_search ($timezone, $timezones))
+                            <option selected="selected" value="{{ array_search ($timezone, $timezones) }}">{{ $timezone }} </option>
+                        @else
+                            <option value="{{ array_search ($timezone, $timezones) }}">{{ $timezone }} </option>
+                        @endif
                     @endforeach
                 </select>
                 @error('timezone')

@@ -11,4 +11,5 @@ Route::get('/day', [PlannerController::class, 'day']);
 Route::get('week', [PlannerController::class, 'week']);
 Route::get('/month', [PlannerController::class, 'month']);
 Route::get('/planner/events', [PlannerController::class, 'events']);
+Route::post('/planner/timezone',[ PlannerController::class, 'setTimezone']);
 

@@ -11,14 +11,27 @@
     </ul>
 
     <div class="col-md-3 text-end">
-        <select class="form-select" name="timezone">
+        <form id="timezone-form" method="POST" action="/planner/timezone">
+            @csrf
+            <select class="form-select" id="timezone" onchange="setTimezone()" name="timezone">
             @foreach(\App\Helpers::timezonesList() as $timezone)
-                <option value="{{ $timezone }}">{{ $timezone }} </option>
+                @if(Illuminate\Support\Facades\Cookie::get('timezone') == array_search ($timezone, \App\Helpers::timezonesList()))
+                    <option selected="selected" value="{{ array_search ($timezone, \App\Helpers::timezonesList()) }}">{{ $timezone }} </option>
+                @else
+                        <option value="{{ array_search ($timezone, \App\Helpers::timezonesList()) }}">{{ $timezone }} </option>
+                @endif
             @endforeach
-        </select>
+            </select>
+        </form>
     </div>
 
     <div class="col-md-3 text-end">
         <a href="/events/create" class="btn btn-outline-primary me-2">Create Event</a>
     </div>
+
+    <script>
+        function setTimezone() {
+            document.getElementById('timezone-form').submit();
+        }
+    </script>
 </header>

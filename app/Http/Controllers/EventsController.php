@@ -9,6 +9,7 @@ use DatePeriod;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cookie;
 
 class EventsController extends Controller
 {
@@ -53,6 +54,10 @@ class EventsController extends Controller
             'duration' => $request->input('duration'),
             'timezone' => $request->input('timezone')
         ]);
+
+        if($request->cookie('timezone') == null) {
+            Cookie::queue(cookie('timezone', $request->input('timezone'), $minute = 1440));
+        }
 
         return redirect('/day');
     }
