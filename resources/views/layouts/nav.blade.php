@@ -15,11 +15,13 @@
             @csrf
             <select class="form-select" id="timezone" onchange="setTimezone()" name="timezone">
             @foreach(\App\Helpers::timezonesList() as $timezone)
-                @if(Illuminate\Support\Facades\Cookie::get('timezone') == array_search ($timezone, \App\Helpers::timezonesList()))
-                    <option selected="selected" value="{{ array_search ($timezone, \App\Helpers::timezonesList()) }}">{{ $timezone }} </option>
-                @else
-                        <option value="{{ array_search ($timezone, \App\Helpers::timezonesList()) }}">{{ $timezone }} </option>
-                @endif
+                    @if(Illuminate\Support\Facades\Cookie::get('timezone') == array_search ($timezone, \App\Helpers::timezonesList()))
+                        <option selected="selected"
+                                value="{{ array_search ($timezone, \App\Helpers::timezonesList()) }}">{{ $timezone }} </option>
+                    @else
+                        <option
+                            value="{{ array_search ($timezone, \App\Helpers::timezonesList()) }}">{{ $timezone }} </option>
+                    @endif
             @endforeach
             </select>
         </form>

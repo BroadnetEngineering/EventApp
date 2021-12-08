@@ -5,7 +5,7 @@
 @section('content')
     <h3 class="text-center">Create Event</h3>
     <div class="d-flex justify-content-center">
-        <form method="POST" action="/events"  class="row w-50 g-3">
+        <form method="POST" action="/events" class="row w-50 g-3">
             @csrf
             <div class="col-md-12">
                 <label for="name" class="form-label">Name</label>
@@ -21,49 +21,30 @@
                 <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
-            <div class="col-md-6">
-                <label class="form-label">Start Date</label>
-                <input type="text" class="form-control" name="start_date" value="" />
-                @error('start_date')
-                <div class="text-danger">{{ $message }}</div>
-                @enderror
+            <div class="col-md-12">
+                <label class="form-label">Date</label>
+                <input type="text" class="form-control" name="start_date" value=""/>
             </div>
-            <div class="col-md-3">
-                <label class="form-label">Start Time</label>
-                <select class="form-select" name="start_time">
-                        @foreach($date_range as $date)
-                            <option value="{{ $date->format("H:i") }}">{{ $date->format("h:i a") }} </option>
-                        @endforeach
-                </select>
-                @error('start_time')
-                <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
-            <div class="col-md-3">
-                <label class="form-label">Duration (min)</label>
-                <select class="form-select" name="duration">
-                    @foreach($duration_range as $duration)
-                        <option value="{{ $duration }}">{{ $duration }} </option>
+            <div class="col-md-12">
+                <label class="form-label">Timeslots</label>
+                <select multiple class="" id="start-times" name="start_times[]">
+                    @foreach($times as $time)
+                        <option value="{{ $time }}">{{ \Carbon\Carbon::parse($time)->format("h:i a") }} </option>
                     @endforeach
                 </select>
-                @error('duration')
-                <div class="text-danger">{{ $message }}</div>
-                @enderror
             </div>
             <div class="col-md-12">
                 <label class="form-label">Timezone</label>
                 <select class="form-select" name="timezone">
                     @foreach($timezones as $timezone)
                         @if(Illuminate\Support\Facades\Cookie::get('timezone') == array_search ($timezone, $timezones))
-                            <option selected="selected" value="{{ array_search ($timezone, $timezones) }}">{{ $timezone }} </option>
+                            <option selected="selected"
+                                    value="{{ array_search ($timezone, $timezones) }}">{{ $timezone }} </option>
                         @else
                             <option value="{{ array_search ($timezone, $timezones) }}">{{ $timezone }} </option>
                         @endif
                     @endforeach
                 </select>
-                @error('timezone')
-                <div class="text-danger">{{ $message }}</div>
-                @enderror
             </div>
             <div class="col-12">
                 <button type="submit" class="btn btn-primary">Create Event</button>
@@ -72,13 +53,34 @@
     </div>
 
     <script>
-        $(function() {
+        $(function () {
             $('input[name="start_date"]').daterangepicker({
                 singleDatePicker: true,
                 showDropdowns: true,
-            }, function(start) {
+            }, function (start) {
                 $('input[name="start_date"]').val(start);
+
+                $.ajax({
+                    type: 'GET',
+                    url: '/events/times?date=' + moment(start).format("MM/DD/YYYY"),
+                    success: function (request) {
+                        let data = JSON.parse(request);
+                        let startTimes = $("#start-times");
+                        startTimes.empty();
+                        $.each(data, function (val, text) {
+                            startTimes.append(
+                                $('<option></option>').val(text).html(moment(text, "HH:mm:ss").format("hh:mm a"))
+                            );
+                        });
+                    },
+                    error: function () {
+                        console.log(data);
+                    }
+                });
             });
         });
+        new SlimSelect({
+            select: '#start-times'
+        })
     </script>
 @endsection
