@@ -28,14 +28,23 @@ class EventsController extends Controller
         $duration_range = range(30, 720, 30);
 
         return view('events.create', [
-            'dateRange' => $date_range,
-            'durationRange' => $duration_range,
+            'date_range' => $date_range,
+            'duration_range' => $duration_range,
             'timezones' => Helpers::timezonesList()
         ]);
     }
 
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required|unique:posts|max:255',
+            'description' => 'required',
+            'start_date' => 'required',
+            'start_time' => 'required',
+            'duration' => 'required',
+            'timezone' => 'required'
+        ]);
+
         Event::create([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
@@ -45,14 +54,25 @@ class EventsController extends Controller
             'timezone' => $request->input('timezone')
         ]);
 
-        return redirect('planner/day');
+        return redirect('/day');
     }
 
     public function edit($id)
     {
         $event = Event::find($id);
 
-        return view('events.edit', ['event' => $event]);
+        $start_range = DateTime::createFromFormat("H:i", "00:00");
+        $end_range = DateTime::createFromFormat("H:i", "24:00");
+        $date_range = new DatePeriod($start_range, new DateInterval("PT30M"), $end_range );
+
+        $duration_range = range(30, 720, 30);
+
+        return view('events.edit', [
+            'event' => $event,
+            'date_range' => $date_range,
+            'duration_range'=> $duration_range,
+            'timezones' => Helpers::timezonesList()])
+            ;
     }
 
     public function update(Request $request, $id)
@@ -64,7 +84,7 @@ class EventsController extends Controller
 
         $event->save();
 
-        return redirect('planner/day');
+        return redirect('/day');
     }
 
     public function destroy($id)
@@ -73,6 +93,6 @@ class EventsController extends Controller
 
         $event->delete();
 
-        return redirect('planner/index');
+        return redirect('/day');
     }
 }

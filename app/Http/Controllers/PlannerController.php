@@ -20,7 +20,7 @@ class PlannerController extends Controller
 
             $calendar_events[] = [
                 'title' => $event->name,
-                'url' => 'events/'.$event->id."/url",
+                'url' => 'events/'.$event->id,
                 'start' => $start_time->format('Y-m-d H:i'),
                 'end' => $start_time->addMinutes($event->duration)->format('Y-m-d H:i'),
                 'color' => '#FF5722'

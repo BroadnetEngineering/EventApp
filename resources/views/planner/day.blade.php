@@ -10,7 +10,14 @@
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridDay'
+                initialView: 'dayGridDay',
+                events: '/planner/events',
+                eventClick: function(info) {
+                    if (info.event.url) {
+                        window.open(info.event.url, "_blank");
+                        return false;
+                    }
+                }
             });
             calendar.render();
         });
